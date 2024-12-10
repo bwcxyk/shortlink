@@ -56,15 +56,18 @@ func detectAPIDocHost() {
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
+	// 顶级路由分组，统一上下文路径
+	shortlinkGroup := r.Group("/shortlink")
+
 	// Swagger
 	docs.SwaggerInfo.Title = "Jump Jump API Documentation"
 	docs.SwaggerInfo.Description = "🚀🚀🚀"
 	docs.SwaggerInfo.Version = "v1"
-	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.BasePath = "/shortlink/v1"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
-	url := ginSwagger.URL("/swagger/doc.json")
+	url := ginSwagger.URL("/shortlink/swagger/doc.json")
 	detectAPIDocHost()
-	docsR := r.Group("/swagger", gin.BasicAuth(getAPIDocBasicAccounts()))
+	docsR := shortlinkGroup.Group("/swagger", gin.BasicAuth(getAPIDocBasicAccounts()))
 	{
 		docsR.GET("/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	}
@@ -77,17 +80,17 @@ func SetupRouter() *gin.Engine {
 	}
 
 	r.Use(handlers.AllowedHostsMiddleware())
-	r.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedPaths([]string{"/v1/"})))
+	r.Use(gzip.Gzip(gzip.DefaultCompression, gzip.WithExcludedPaths([]string{"/shortlink/v1/"})))
 
 	// serve dashboard static resources
 	r.LoadHTMLFiles("./web/admin/index.html")
-	r.StaticFS("/static", http.Dir("./web/admin/static"))
-	r.GET("/", func(c *gin.Context) {
+	shortlinkGroup.Static("/static", "./web/admin/static")
+	shortlinkGroup.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 
 	// v1 API's
-	v1 := r.Group("/v1")
+	v1 := shortlinkGroup.Group("/v1")
 	{
 		// account stuff
 		v1.POST("/user/login", handlers.LoginAPI)
