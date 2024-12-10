@@ -1,7 +1,7 @@
 # build stage
-FROM golang:1.13-alpine as builder
+FROM golang:1.21-alpine AS builder
 
-LABEL maintainer="m.mjw.ma@gmail.com"
+LABEL maintainer="yaokun@bwcxtech.com"
 
 ENV GOPROXY=https://goproxy.io
 ENV CGO_ENABLED=0
