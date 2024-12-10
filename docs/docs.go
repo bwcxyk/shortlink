@@ -856,19 +856,19 @@ var doc = `{
         "LoginAPIRequest": {
             "type": "object",
             "required": [
-                "password",
-                "username"
+                "username",
+                "password"
             ],
             "properties": {
-                "password": {
-                    "description": "密码",
-                    "type": "string",
-                    "example": "your_password"
-                },
                 "username": {
                     "description": "用户名",
                     "type": "string",
                     "example": "your_username"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string",
+                    "example": "your_password"
                 }
             }
         },

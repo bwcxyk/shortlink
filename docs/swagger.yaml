@@ -94,17 +94,17 @@ definitions:
     type: object
   LoginAPIRequest:
     properties:
-      password:
-        description: 密码
-        example: your_password
-        type: string
       username:
         description: 用户名
         example: your_username
         type: string
+      password:
+        description: 密码
+        example: your_password
+        type: string
     required:
-    - password
     - username
+    - password
     type: object
   LoginAPIResponseData:
     properties:
